@@ -40,7 +40,22 @@ def indexHandler(request):
         new_n['fields']['thumbnail'] = request.META.get('wsgi.url_scheme', '') + '://' + request.META.get('HTTP_HOST', '') + '/media/' + n.logo.name
         new_n['webUrl'] = request.META.get('wsgi.url_scheme', '') + '://' + request.META.get('HTTP_HOST', '') + '/news/' + str(n.id)
         new_n['apiUrl'] = request.META.get('wsgi.url_scheme', '') + '://' + request.META.get('HTTP_HOST', '') + '/api/' + str(n.id)
-        new_n['webPublicationDate'] = n.date
+        new_n['webPublicationDate'] = n.date.strftime("%m/%d/%Y, %H:%M:%S")
+        new_n['tags'] = [
+            {
+
+                "id": "",
+                "type": "",
+                "webTitle": n.author,
+                "webUrl": request.META.get('wsgi.url_scheme', '') + '://' + request.META.get('HTTP_HOST', '') + '/news/' + str(n.id),
+                "apiUrl": request.META.get('wsgi.url_scheme', '') + '://' + request.META.get('HTTP_HOST', '') + '/api/' + str(n.id),
+                "references": [],
+                "bio": n.author,
+                "bylineImageUrl": request.META.get('wsgi.url_scheme', '') + '://' + request.META.get('HTTP_HOST', '') + '/media/' + n.logo.name,
+                "firstName": n.author,
+                "lastName": ""
+            }
+        ]
 
         new_news.append(new_n)
     
