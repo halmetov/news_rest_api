@@ -11,6 +11,7 @@ def indexHandler(request):
     print(request.GET)
     print('request POST')
     print(request.POST)
+    current_site = request.META
     news = News.objects.all()
     new_news = []
     for n in news:
@@ -25,7 +26,7 @@ def indexHandler(request):
                 "apiUrl": "https://content.guardianapis.com/business/live/2021/apr/15/deliveroo-hut-group-naked-wines-pandemic-sales-stock-markets-ftse-dow-bitcoin-business-live",
                 "fields": {
                   "trailText": "",
-                  "thumbnail": "https://media.guim.co.uk/d64524ce52e8e49c4fed52e385186842f7371ef2/0_486_5690_3416/500.jpg"
+                  "thumbnail": ""
                 },
                 "tags": [],
                 "isHosted": False,
@@ -36,10 +37,10 @@ def indexHandler(request):
         new_n['webTitle'] = n.title
         new_n['sectionName'] = n.category.title
         new_n['fields']['trailText'] = n.description
+        new_n['fields']['thumbnail'] = request.META.get('wsgi.url_scheme', '') + '://' + request.META.get('HTTP_HOST', '') + '/media/' + n.logo.name
         new_n['webUrl'] = 'test'
         new_n['webPublicationDate'] = n.date
-        #new_n['logo'] = n.logo
-        
+
         new_news.append(new_n)
     
     response = {
