@@ -28,7 +28,7 @@ SECRET_KEY = 'vf=4eaq=xk9h@1sqgx$+49j!xc4o))ezy8^k2@a$o!0_5)opu_'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['bahti.tests.kz', 'localhost', '127.0.0.1']
 
 
 # Application definition
