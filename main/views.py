@@ -38,7 +38,8 @@ def indexHandler(request):
         new_n['sectionName'] = n.category.title
         new_n['fields']['trailText'] = n.description
         new_n['fields']['thumbnail'] = request.META.get('wsgi.url_scheme', '') + '://' + request.META.get('HTTP_HOST', '') + '/media/' + n.logo.name
-        new_n['webUrl'] = 'test'
+        new_n['webUrl'] = request.META.get('wsgi.url_scheme', '') + '://' + request.META.get('HTTP_HOST', '') + '/news/' + str(n.id)
+        new_n['apiUrl'] = request.META.get('wsgi.url_scheme', '') + '://' + request.META.get('HTTP_HOST', '') + '/api/' + str(n.id)
         new_n['webPublicationDate'] = n.date
 
         new_news.append(new_n)
@@ -54,5 +55,37 @@ def indexHandler(request):
         "orderBy": "newest",
         "results": new_news
     }
+    return JsonResponse({'success': True, '_success': True, 'response':response})
+
+
+def news_detailHandler(request ,news_id):
+    new = News.objects.get(id=int(news_id))
+
+    return render(request, 'news-id.html', {'new': new})
+
+
+
+def news_api_detailHandler(request ,news_id):
+    new = News.objects.get(id=int(news_id))
+    response = {
+            "status": "ok",
+            "userTier": "developer",
+            "total": 1,
+            "content": {
+                "id": str(new.id),
+                "type": "liveblog",
+                "sectionId": "business",
+                "sectionName": new.category.title,
+                "webPublicationDate": new.date,
+                "webTitle": new.title,
+                "webUrl": request.META.get('wsgi.url_scheme', '') + '://' + request.META.get('HTTP_HOST', '') + '/news/' + str(new.id),
+                "apiUrl": request.META.get('wsgi.url_scheme', '') + '://' + request.META.get('HTTP_HOST', '') + '/api/' + str(new.id),
+                "isHosted": False,
+                "pillarId": "pillar/news",
+                "pillarName": "News"
+            }
+        }
+
+
     return JsonResponse({'success': True, '_success': True, 'response':response})
 

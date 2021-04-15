@@ -18,7 +18,7 @@ from django.urls import path
 from django.conf.urls import url
 from django.views.static import serve
 from news import settings
-from main.views import indexHandler
+from main.views import indexHandler, news_detailHandler, news_api_detailHandler
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -26,5 +26,7 @@ urlpatterns = [
             'document_root': settings.MEDIA_ROOT
         }),
 
+    path('news/<int:news_id>/', news_detailHandler),
+    path('api/<int:news_id>/', news_api_detailHandler),
     path('', indexHandler),
     ]
