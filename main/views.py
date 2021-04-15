@@ -9,10 +9,6 @@ from main.models import News
 def indexHandler(request):
     section = request.GET.get('section', '')
     page_size = int(request.GET.get('page-size', 10))
-    print('request GET')
-    print(request.GET)
-    print('request POST')
-    print(request.POST)
     if section:
         news = News.objects.filter(category__title=section)[0:page_size]
     else:
