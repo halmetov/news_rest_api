@@ -8,6 +8,7 @@ from datetime import datetime
 
 
 def indexHandler(request):
+    print('hello')
     section = request.GET.get('section', '')
     page_size = int(request.GET.get('page-size', 10))
     orderby = request.GET.get('order-by', 'newest')
