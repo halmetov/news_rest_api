@@ -9,10 +9,26 @@ from main.models import News
 def indexHandler(request):
     section = request.GET.get('section', '')
     page_size = int(request.GET.get('page-size', 10))
+    orderby = request.GET.get('order-by', 'newest')
+
     if section:
-        news = News.objects.filter(category__title=section)[0:page_size]
+        if orderby == 'newest':
+            news = News.objects.filter(category__title=section).order_by('-date')[0:page_size]
+        elif orderby == 'oldest':
+            news = News.objects.filter(category__title=section).order_by('date')[0:page_size]
+        elif orderby == 'relevance':
+            news = News.objects.filter(category__title=section).filter(status=0).order_by('-date')[0:page_size]
+        else:
+            news = News.objects.filter(category__title=section)[0:page_size]
     else:
-        news = News.objects.all()[0:page_size]
+        if orderby == 'newest':
+            news = News.objects.all().order_by('-date')[0:page_size]
+        elif orderby == 'oldest':
+            news = News.objects.all().order_by('date')[0:page_size]
+        elif orderby == 'relevance':
+            news = News.objects.filter(status=0).order_by('-date')[0:page_size]
+        else:
+            news = News.objects.all()[0:page_size]
     new_news = []
     for n in news:
         new_n = {
@@ -77,6 +93,12 @@ def news_detailHandler(request ,news_id):
     new = News.objects.get(id=int(news_id))
 
     return render(request, 'news-id.html', {'new': new})
+
+
+def newsHandler(request):
+    news = News.objects.all().order_by('-category__news__date')
+
+    return render(request, 'news.html', {'news': news})
 
 
 
